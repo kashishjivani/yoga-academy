@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import RegistrationForm from "./components/RegistrationForm";
+import BatchSelectionForm from "./components/BatchSelectionForm";
 
 function App() {
+  const [isUserRegistered, setIsUserRegistered] = useState(false);
+  const [userDetails, setUserDeatils] = useState({});
+  const [selectedBatch, setSelectedBatch] = useState("");
+
+
+  const handleRegistrationSubmit = (data) => {
+    setUserDeatils(data);
+    setIsUserRegistered(true);
+  };
+
+  const handleBatchSelectionSubmit = (batch) => {
+    setSelectedBatch(batch);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="">
+      <Router>
+        <Routes>
+          <Route path="/" element={<RegistrationForm onRegistrationSubmit={handleRegistrationSubmit} />} />
+          <Route path="/batch" element={<BatchSelectionForm onBatchSelectionSubmit={handleBatchSelectionSubmit} />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
