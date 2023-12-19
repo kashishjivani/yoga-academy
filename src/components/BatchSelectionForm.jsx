@@ -2,21 +2,20 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import ConfirmationModal from "./ConfirmationModal";
+import { getBatches, postDetails } from "../apiRoutes";
 
-const BatchSelectionForm = ({ onBatchSelectionSubmit }) => {
+const BatchSelectionForm = () => {
+  const location = useLocation();
   const [selectedBatch, setSelectedBatch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [batchResult, setBatchResult] = useState([]);
-  const generateBatchRoute = "http://localhost:3001/api/generateBatch";
   const feeAmount = "₹ 500/-";
-  const location = useLocation();
   const userID = location.state;
-  const detailsRoute = "http://localhost:3001/api/details";
 
   useEffect(() => {
     const fetchBatches = async () => {
-      const response = await axios.get(generateBatchRoute);
-      setBatchResult(response.data.results);
+      const result = await getBatches();
+      setBatchResult(result);
     };
     fetchBatches();
   }, []);
@@ -31,18 +30,13 @@ const BatchSelectionForm = ({ onBatchSelectionSubmit }) => {
   };
 
   const handleConfirm = async () => {
-    try {
-      const response = await axios.post(detailsRoute, {
-        userID,
-        selectedBatch,
-      });
-      console.log("Data sent successfully", response.data);
-      alert(response.data.message);
-      onBatchSelectionSubmit(selectedBatch);
-      setIsModalOpen(false);
-    } catch (err) {
-      console.log(err);
-    }
+    const response = await postDetails({
+      userID,
+      selectedBatch,
+    });
+    console.log("Data sent successfully", response);
+    alert(response.message);
+    setIsModalOpen(false);
   };
 
   return (
@@ -60,7 +54,7 @@ const BatchSelectionForm = ({ onBatchSelectionSubmit }) => {
             className="form-select mt-1 block w-full border p-2"
           >
             <option value="">Select Batch</option>
-            {batchResult.map((batch) => (
+            {batchResult?.map((batch) => (
               <option key={batch.BatchID} value={batch.BatchID}>
                 {" "}
                 {`${batch.StartTime.slice(11, 16)} - ${batch.EndTime.slice(

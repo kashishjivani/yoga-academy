@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { postUser } from "../apiRoutes";
 
-const RegistrationForm = ({ onRegistrationSubmit }) => {
+const RegistrationForm = () => {
   const navigate = useNavigate();
-  const userRoute = "http://localhost:3001/api/user";
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
@@ -24,16 +23,11 @@ const RegistrationForm = ({ onRegistrationSubmit }) => {
   };
 
   const handleRegistrationSubmit = async (e) => {
-    try {
-      e.preventDefault();
-      const response = await axios.post(userRoute, userData);
-      console.log("Data sent successfully", response.data);
-      alert(response.data.message);
-      onRegistrationSubmit(userData);
-      navigate("/batch", { state: response.data.userID });
-    } catch (error) {
-      console.error("Error sending data:", error);
-    }
+    e.preventDefault();
+    const { message, userID } = await postUser(userData);
+    console.log("Data sent successfully", message, userID);
+    alert(message);
+    navigate("/batch", { state: userID });
   };
 
   return (
