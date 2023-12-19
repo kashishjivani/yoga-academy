@@ -4,6 +4,9 @@ import RegistrationForm from "./components/RegistrationForm";
 import BatchSelectionForm from "./components/BatchSelectionForm";
 
 function App() {
+
+  // Components for registration and batch selection on different routes
+  
   return (
     <div className="">
       <Router>

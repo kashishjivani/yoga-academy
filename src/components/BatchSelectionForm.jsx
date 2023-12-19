@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import axios from "axios";
 import ConfirmationModal from "./ConfirmationModal";
 import { getBatches, postDetails } from "../apiRoutes";
 
 const BatchSelectionForm = () => {
   const location = useLocation();
-  const [selectedBatch, setSelectedBatch] = useState("");
+  const [selectedBatch, setSelectedBatch] = useState(0);  // State for selected batch to send to the API
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [batchResult, setBatchResult] = useState([]);
-  const feeAmount = "₹ 500/-";
+  const feeAmount = "₹ 500/-";           // hardcoded values for payment
   const userID = location.state;
 
-  useEffect(() => {
+  useEffect(() => {                        // Fetching batch details from API
     const fetchBatches = async () => {
-      const result = await getBatches();
-      setBatchResult(result);
+      const batches = await getBatches();
+      setBatchResult(batches);
     };
     fetchBatches();
   }, []);
@@ -34,11 +33,14 @@ const BatchSelectionForm = () => {
       userID,
       selectedBatch,
     });
-    console.log("Data sent successfully", response);
-    alert(response.message);
+    const { message } = response;
+    alert(message);
     setIsModalOpen(false);
   };
 
+  // Form for batch and payment details
+  // Has modal for confirmation of payment
+  
   return (
     <div className="bg-gray-100 min-h-screen flex  flex-col items-center justify-center">
       <form
@@ -55,9 +57,9 @@ const BatchSelectionForm = () => {
           >
             <option value="">Select Batch</option>
             {batchResult?.map((batch) => (
-              <option key={batch.BatchID} value={batch.BatchID}>
+              <option key={batch.batchId} value={batch.batchId}>
                 {" "}
-                {`${batch.StartTime.slice(11, 16)} - ${batch.EndTime.slice(
+                {`${batch.startTime?.slice(11, 16)} - ${batch.endTime?.slice(
                   11,
                   16
                 )}`}{" "}

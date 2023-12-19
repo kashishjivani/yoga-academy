@@ -4,7 +4,7 @@ import { postUser } from "../apiRoutes";
 
 const RegistrationForm = () => {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState({
+  const [userData, setUserData] = useState({   // State for user details
     firstName: "",
     lastName: "",
     age: "",
@@ -22,14 +22,16 @@ const RegistrationForm = () => {
     }
   };
 
-  const handleRegistrationSubmit = async (e) => {
+  const handleRegistrationSubmit = async (e) => {  // Calling API for Posting user details
     e.preventDefault();
-    const { message, userID } = await postUser(userData);
-    console.log("Data sent successfully", message, userID);
+    const response = await postUser(userData);
+    const { message, userID } = response;
     alert(message);
-    navigate("/batch", { state: userID });
+    navigate("/batch", { state: userID });  // After posting, navigating to the batch selection page with the newly generated user id 
   };
 
+  // Form for filling user details
+  
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
       <form

@@ -1,6 +1,9 @@
 import React from "react";
 
 const ConfirmationModal = ({ onClose, onConfirm }) => {
+
+    // Modal for payment confirmation
+    
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-8 rounded-md shadow-md">

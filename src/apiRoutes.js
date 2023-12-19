@@ -16,8 +16,8 @@ export const getBatches = async () => {
     const fetchBatchesRoute = "http://localhost:3001/api/fetchBatches";
     const response = await axios.get(fetchBatchesRoute);
     const { data } = response;
-    const { results } = data;
-    return results;
+    const { batches } = data;
+    return batches;
   } catch (error) {}
 };
 
@@ -28,6 +28,6 @@ export const postDetails = async (details) => {
     const { data } = response;
     return data;
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
